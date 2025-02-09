@@ -139,25 +139,6 @@ $response = $cardManager->createCard($cardData);
 print_r($response);
 ```
 
-### 4. 消息处理
-
-```php
-use WeChatSDK\Message\MessageHandler;
-
-$messageHandler = new MessageHandler($config);
-
-// 处理接收到的消息
-$messageHandler->onText(function ($message) {
-    return '您发送的内容是：' . $message['Content'];
-});
-
-$messageHandler->onEvent(function ($message) {
-    return '收到事件：' . $message['Event'];
-});
-
-$messageHandler->handle();
-```
-
 ## 测试
 
 使用 PHPUnit 运行单元测试：
