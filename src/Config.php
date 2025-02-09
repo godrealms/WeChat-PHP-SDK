@@ -10,7 +10,7 @@ class Config
     private string $aesKey;
     private string $mchId;
 
-    public function __construct($appId, $appSecret, $token, $aesKey,$mchId)
+    public function __construct($appId, $appSecret, $token = "", $aesKey = "", $mchId = "")
     {
         $this->appId = $appId;
         $this->appSecret = $appSecret;
