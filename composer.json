@@ -1,0 +1,41 @@
+{
+  "name": "godrealms/wechat-php-sdk",
+  "description": "A PHP SDK for WeChat Official Account and Mini Programs",
+  "type": "library",
+  "keywords": ["wechat", "sdk", "php", "official account", "mini program"],
+  "homepage": "https://github.com/godrealms/WeChat-PHP-SDK",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Endorphins",
+      "email": "wujie@endorphins.cn",
+      "homepage": "https://endorphins.cn",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "psr/log": "^1.1",
+    "guzzlehttp/guzzle": "^7.9"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9"
+  },
+  "autoload": {
+    "psr-4": {
+      "WeChatSDK\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WeChatSDK\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit --bootstrap vendor/autoload.php tests"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
