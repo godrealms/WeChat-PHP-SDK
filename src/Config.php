@@ -4,13 +4,13 @@ namespace WeChatSDK;
 
 class Config
 {
-    private string $appId;
-    private string $appSecret;
-    private string $token;
-    private string $aesKey;
-    private string $mchId;
+    private $appId;
+    private $appSecret;
+    private $token;
+    private $aesKey;
+    private $mchId;
 
-    public function __construct($appId, $appSecret, $token = "", $aesKey = "", $mchId = "")
+    public function __construct($appId="", $appSecret="", $token = "", $aesKey = "", $mchId = "")
     {
         $this->appId = $appId;
         $this->appSecret = $appSecret;

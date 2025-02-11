@@ -9,7 +9,7 @@ use WeChatSDK\Config;
 
 class OAuth
 {
-    private Config $config;
+    private $config;
 
     /**
      * OAuth constructor.
