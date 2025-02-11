@@ -11,7 +11,7 @@ class Material
      * @param string $filePath 图片文件的本地路径
      * @return array 返回接口的响应结果
      */
-    public static function uploadImage(string $accessToken, string $filePath): array
+    public static function UploadImage(string $accessToken, string $filePath): array
     {
         // 检查文件是否存在
         if (!file_exists($filePath)) {
