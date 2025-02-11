@@ -49,7 +49,7 @@ class OAuth
      * @return array 返回解析后的响应数据
      * @throws GuzzleException
      */
-    public function getAccessToken(string $code): array
+    public function getAccessTokenByCode(string $code): array
     {
         $url = 'https://api.weixin.qq.com/sns/oauth2/access_token';
         $params = [
@@ -57,6 +57,32 @@ class OAuth
             'secret' => $this->config->getAppSecret(),
             'code' => $code,
             'grant_type' => 'authorization_code',
+        ];
+
+        try {
+            $client = new Client();
+            $response = $client->get($url, ['query' => $params]);
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (RequestException $e) {
+            return [
+                'errcode' => 500,
+                'errmsg' => $e->getMessage(),
+            ];
+        }
+    }
+    /**
+     * 获取 Access Token
+     *
+     * @return array 返回解析后的响应数据
+     * @throws GuzzleException
+     */
+    public function getAccessToken(): array
+    {
+        $url = 'https://api.weixin.qq.com/sns/oauth2/access_token';
+        $params = [
+            'appid' => $this->config->getAppId(),
+            'secret' => $this->config->getAppSecret(),
+            'grant_type' => 'client_credential',
         ];
 
         try {
