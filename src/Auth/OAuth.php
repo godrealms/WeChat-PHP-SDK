@@ -78,7 +78,7 @@ class OAuth
      */
     public function getAccessToken(): array
     {
-        $url = 'https://api.weixin.qq.com/sns/oauth2/access_token';
+        $url = 'https://api.weixin.qq.com/cgi-bin/token';
         $params = [
             'appid' => $this->config->getAppId(),
             'secret' => $this->config->getAppSecret(),
