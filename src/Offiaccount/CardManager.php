@@ -69,7 +69,7 @@ class CardManager
         try {
             // 发送 POST 请求
             $response = $client->post($url, [
-                'json' => $cardData, // 自动将数组编码为 JSON
+                'body' => json_encode($cardData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), // 自动将数组编码为 JSON
                 'headers' => [
                     'Content-Type' => 'application/json',
                 ],
