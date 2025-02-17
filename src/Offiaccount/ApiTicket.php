@@ -13,10 +13,10 @@ class ApiTicket
      * @return array|mixed
      * @throws GuzzleException
      */
-    public static function GetTicket($access_token)
+    public static function GetTicket($access_token, $type = "jsapi")
     {
         // API 地址
-        $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={$access_token}&type=wx_card";
+        $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={$access_token}&type={$type}";
 
         // 创建 GuzzleHttp 客户端
         $client = new Client();
