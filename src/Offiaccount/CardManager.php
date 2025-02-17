@@ -174,4 +174,46 @@ class CardManager
             ];
         }
     }
+    /**
+     * 删除卡券
+     *
+     * @param string $accessToken 调用接口凭证
+     * @param string $cardId 卡券 ID
+     * @return array 返回接口的响应结果
+     * @throws GuzzleException
+     */
+    public static function GetCardUrl(string $accessToken, string $cardId,string $outer_str = "h5"): array
+    {
+        // API 地址
+        $url = "https://api.weixin.qq.com/card/membercard/activate/geturl?access_token={$accessToken}";
+
+        // 请求数据
+        $requestData = [
+            'card_id' => $cardId,
+            'outer_str'=>$outer_str
+        ];
+
+        // 创建 GuzzleHttp 客户端
+        $client = new Client();
+
+        try {
+            // 发送 POST 请求
+            $response = $client->post($url, [
+                'json' => $requestData,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
+
+            // 获取响应体并解析为数组
+            $responseBody = $response->getBody()->getContents();
+            return json_decode($responseBody, true);
+
+        } catch (RequestException $e) {
+            return [
+                'errcode' => 500,
+                'errmsg' => $e->getMessage(),
+            ];
+        }
+    }
 }
