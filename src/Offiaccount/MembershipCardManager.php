@@ -97,7 +97,7 @@ class MembershipCardManager
      * @return array 解密后的结果
      * @throws GuzzleException
      */
-    function decryptEncryptCode(string $accessToken, string $encryptCode): array
+    public static function decryptEncryptCode(string $accessToken, string $encryptCode): array
     {
         // 微信解密接口 URL
         $url = "https://api.weixin.qq.com/card/code/decrypt?access_token={$accessToken}";
