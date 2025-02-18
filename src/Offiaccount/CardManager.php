@@ -32,7 +32,7 @@ class CardManager
         try {
             // 发送 POST 请求
             $response = $client->post($url, [
-                'json' => $requestData,
+                'body' => json_encode($requestData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), // 自动将数组编码为 JSON
                 'headers' => [
                     'Content-Type' => 'application/json',
                 ],
