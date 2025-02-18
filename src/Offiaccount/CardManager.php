@@ -115,7 +115,7 @@ class CardManager
         try {
             // 发送 POST 请求
             $response = $client->post($url, [
-                'json' => $requestData,
+                'body' => json_encode($requestData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), // 自动将数组编码为 JSON
                 'headers' => [
                     'Content-Type' => 'application/json',
                 ],
@@ -157,7 +157,7 @@ class CardManager
         try {
             // 发送 POST 请求
             $response = $client->post($url, [
-                'json' => $requestData,
+                'body' => json_encode($requestData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), // 自动将数组编码为 JSON
                 'headers' => [
                     'Content-Type' => 'application/json',
                 ],
@@ -175,7 +175,7 @@ class CardManager
         }
     }
     /**
-     * 删除卡券
+     * 获取卡券URL
      *
      * @param string $accessToken 调用接口凭证
      * @param string $cardId 卡券 ID
@@ -199,7 +199,7 @@ class CardManager
         try {
             // 发送 POST 请求
             $response = $client->post($url, [
-                'json' => $requestData,
+                'body' => json_encode($requestData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), // 自动将数组编码为 JSON
                 'headers' => [
                     'Content-Type' => 'application/json',
                 ],
