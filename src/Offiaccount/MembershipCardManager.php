@@ -74,6 +74,21 @@ class MembershipCardManager
         return self::sendPostRequest($url, $updateData);
     }
 
+
+    /**
+     * 激活会员卡
+     * @param string $accessToken
+     * @param array $data
+     * @return array
+     * @throws GuzzleException
+     */
+    public static function activateMembershipCard(string $accessToken, array $data): array
+    {
+        $url = "https://api.weixin.qq.com/card/membercard/activate?access_token={$accessToken}";
+
+        return self::sendPostRequest($url, $data);
+    }
+
     /**
      * 发送 POST 请求的通用方法
      *
