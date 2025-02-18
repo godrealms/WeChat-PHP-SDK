@@ -90,6 +90,26 @@ class MembershipCardManager
     }
 
     /**
+     * 解密 encrypt_code
+     *
+     * @param string $accessToken 微信接口调用凭据
+     * @param string $encryptCode 加密的 code
+     * @return array 解密后的结果
+     * @throws GuzzleException
+     */
+    function decryptEncryptCode(string $accessToken, string $encryptCode): array
+    {
+        // 微信解密接口 URL
+        $url = "https://api.weixin.qq.com/card/code/decrypt?access_token={$accessToken}";
+
+        // 构造请求数据
+        $data = [
+            'encrypt_code' => $encryptCode
+        ];
+        return self::sendPostRequest($url, $data);
+    }
+
+    /**
      * 发送 POST 请求的通用方法
      *
      * @param string $url 请求地址
