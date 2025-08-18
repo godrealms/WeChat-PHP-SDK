@@ -7,7 +7,7 @@
 - **OAuth 授权**：生成授权 URL，获取访问令牌，并获取用户信息。
 - **卡券管理**：创建、分发和兑换卡券。
 - **消息处理**：处理和响应来自微信公众平台的消息。
-- **支付模块**：支持微信支付的基础功能。
+- **支付模块**：支持微信支付的基础功能，包括JSAPI支付。
 - **工具类**：包括缓存、日志、签名生成和 XML 处理工具。
 
 ## 环境要求
@@ -33,6 +33,7 @@ composer require godrealms/wechat-php-sdk
 │   ├── card-manager.php           # 卡券管理示例
 │   ├── card-redeem.php            # 卡券兑换示例
 │   ├── gift-card-manager.php      # 礼品卡管理示例
+│   ├── jsapi-payment.php          # JSAPI支付示例
 │   ├── membership-card-manager.php# 会员卡管理示例
 │   ├── special-ticket-manager.php # 特殊票券管理示例
 │   └── third-party-card-manager.php # 第三方卡券管理示例
@@ -137,6 +138,84 @@ $cardData = [
 ];
 $response = $cardManager->createCard($cardData);
 print_r($response);
+```
+
+### 4. JSAPI支付
+
+```php
+use WeChatSDK\Config;
+use WeChatSDK\Payment\Payment;
+
+// 初始化支付配置
+$config = new Config(
+    'your_app_id',      // AppID
+    'your_app_secret',  // AppSecret
+    '',                 // Token (支付用不到)
+    '',                 // AES Key (支付用不到)
+    'your_mch_id',      // MchID (商户ID)
+    'your_api_key'      // API密钥
+);
+
+// 初始化支付类
+$payment = new Payment($config);
+
+// 调用统一下单接口
+$unifiedOrderParams = [
+    'body' => '测试商品',                            // 商品描述
+    'out_trade_no' => date('YmdHis') . rand(1000, 9999), // 商户订单号
+    'total_fee' => 1,                               // 总金额，单位为分
+    'spbill_create_ip' => $_SERVER['REMOTE_ADDR'], // 终端IP
+    'notify_url' => 'https://yourdomain.com/notify', // 异步通知地址
+    'trade_type' => 'JSAPI',                        // 交易类型
+    'openid' => 'user_openid',                      // 用户标识
+];
+
+$result = $payment->unifiedOrder($unifiedOrderParams);
+
+if ($result['return_code'] === 'SUCCESS' && $result['result_code'] === 'SUCCESS') {
+    // 获取JSAPI支付参数
+    $prepayId = $result['prepay_id'];
+    $jsApiParams = $payment->getJsApiParameters($prepayId);
+    
+    // 将$jsApiParams传递给前端页面，用于调起微信支付
+    echo json_encode($jsApiParams);
+}
+```
+
+在前端页面中使用JSAPI支付参数调起微信支付：
+
+```html
+<script>
+function onBridgeReady() {
+  WeixinJSBridge.invoke('getBrandWCPayRequest', {
+    'appId': '<?= $jsApiParams['appId'] ?>',
+    'timeStamp': '<?= $jsApiParams['timeStamp'] ?>',
+    'nonceStr': '<?= $jsApiParams['nonceStr'] ?>',
+    'package': '<?= $jsApiParams['package'] ?>',
+    'signType': '<?= $jsApiParams['signType'] ?>',
+    'paySign': '<?= $jsApiParams['paySign'] ?>'
+  }, function(res) {
+    if (res.err_msg == "get_brand_wcpay_request:ok") {
+      // 支付成功
+      alert('支付成功');
+    } else {
+      // 支付失败
+      alert('支付失败');
+    }
+  });
+}
+
+if (typeof WeixinJSBridge == "undefined") {
+  if (document.addEventListener) {
+    document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+  } else if (document.attachEvent) {
+    document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+    document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+  }
+} else {
+  onBridgeReady();
+}
+</script>
 ```
 
 ## 测试
