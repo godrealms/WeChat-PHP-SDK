@@ -36,6 +36,28 @@ class Payment
     }
 
     /**
+     * 查询订单接口
+     * 
+     * @param array $params 查询参数，必须包含transaction_id或out_trade_no中的一个
+     * @return array
+     */
+    public function orderQuery(array $params): array
+    {
+        $url = 'https://api.mch.weixin.qq.com/pay/orderquery';
+        
+        // 设置必要的参数
+        $params['appid'] = $this->config->getAppId();
+        $params['mch_id'] = $this->config->getMchId();
+        $params['nonce_str'] = $this->generateNonceStr();
+        $params['sign'] = $this->generateSign($params);
+        
+        // 发送请求
+        $response = $this->sendRequest($url, $params);
+        
+        return $this->parseResponse($response);
+    }
+
+    /**
      * 生成JSAPI支付参数
      * 
      * @param string $prepayId 预支付交易会话标识

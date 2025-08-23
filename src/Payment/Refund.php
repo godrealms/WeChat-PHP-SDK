@@ -39,6 +39,28 @@ class Refund
     }
 
     /**
+     * 查询退款接口
+     * 
+     * @param array $params 查询参数，必须包含以下参数中的一个：transaction_id, out_trade_no, out_refund_no, refund_id
+     * @return array
+     */
+    public function queryRefund(array $params): array
+    {
+        $url = 'https://api.mch.weixin.qq.com/pay/refundquery';
+        
+        // 设置必要的参数
+        $params['appid'] = $this->config->getAppId();
+        $params['mch_id'] = $this->config->getMchId();
+        $params['nonce_str'] = $this->generateNonceStr();
+        $params['sign'] = $this->generateSign($params);
+        
+        // 发送请求（不需要证书）
+        $response = $this->sendRequestWithoutCert($url, $params);
+        
+        return $this->parseResponse($response);
+    }
+
+    /**
      * 生成随机字符串
      * 
      * @param int $length 字符串长度
@@ -89,6 +111,36 @@ class Refund
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($ch, CURLOPT_SSLCERT, $certPath);
         curl_setopt($ch, CURLOPT_SSLKEY, $keyPath);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: text/xml']);
+        
+        $response = curl_exec($ch);
+        
+        if (curl_errno($ch)) {
+            throw new \Exception('Curl error: ' . curl_error($ch));
+        }
+        
+        curl_close($ch);
+        
+        return $response;
+    }
+
+    /**
+     * 发送请求(不需要证书)
+     * 
+     * @param string $url 请求地址
+     * @param array $params 请求参数
+     * @return string
+     */
+    private function sendRequestWithoutCert(string $url, array $params): string
+    {
+        $xml = $this->arrayToXml($params);
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: text/xml']);
         
         $response = curl_exec($ch);
