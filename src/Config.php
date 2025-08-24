@@ -10,8 +10,10 @@ class Config
     private $aesKey;
     private $mchId;
     private $apiKey;
+    private $CertPath;
+    private $KeyPath;
 
-    public function __construct($appId="", $appSecret="", $token = "", $aesKey = "", $mchId = "", $apiKey = "")
+    public function __construct($appId="", $appSecret="", $token = "", $aesKey = "", $mchId = "", $apiKey = "",$CertPath="",$KeyPath="")
     {
         $this->appId = $appId;
         $this->appSecret = $appSecret;
@@ -19,6 +21,8 @@ class Config
         $this->aesKey = $aesKey;
         $this->mchId = $mchId;
         $this->apiKey = $apiKey;
+        $this->CertPath = $CertPath;
+        $this->KeyPath = $KeyPath;
     }
 
     public function getAppId(): string
@@ -49,5 +53,20 @@ class Config
     public function getApiKey(): string
     {
         return $this->apiKey;
+    }
+
+    public function getCertPath()
+    {
+        return $this->CertPath;
+    }
+
+    public function getKeyPath()
+    {
+        return $this->KeyPath;
+    }
+
+    public function getCertPassword()
+    {
+        return null;
     }
 }
