@@ -30,13 +30,9 @@ try {
         'refund_fee' => 100, // 退款金额，单位为分
         'refund_desc' => '商品已售完' // 退款原因
     ];
-    
-    // 证书路径（需要绝对路径）
-    $certPath = '/path/to/your/apiclient_cert.pem';
-    $keyPath = '/path/to/your/apiclient_key.pem';
-    
+
     // 发起退款申请
-    $result = $refund->refund($refundParams, $certPath, $keyPath);
+    $result = $refund->refund($refundParams);
     
     if ($result['return_code'] === 'SUCCESS' && $result['result_code'] === 'SUCCESS') {
         echo "退款申请成功！\n";

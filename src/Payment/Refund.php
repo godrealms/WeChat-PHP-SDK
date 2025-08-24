@@ -17,12 +17,10 @@ class Refund
      * 申请退款接口
      *
      * @param array $params 退款参数
-     * @param string $certPath 证书路径
-     * @param string $keyPath 证书密钥路径
      * @return array
      * @throws \Exception
      */
-    public function refund(array $params, string $certPath, string $keyPath): array
+    public function refund(array $params): array
     {
         $url = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
         
@@ -33,7 +31,7 @@ class Refund
         $params['sign'] = $this->generateSign($params);
         
         // 发送请求
-        $response = $this->sendRequest($url, $params, $certPath, $keyPath);
+        $response = $this->sendRequest($url, $params);
         
         return $this->parseResponse($response);
     }
@@ -91,14 +89,13 @@ class Refund
 
     /**
      * 发送请求(需要证书)
-     * 
+     *
      * @param string $url 请求地址
      * @param array $params 请求参数
-     * @param string $certPath 证书路径
-     * @param string $keyPath 证书密钥路径
      * @return string
+     * @throws \Exception
      */
-    private function sendRequest(string $url, array $params, string $certPath, string $keyPath): string
+    private function sendRequest(string $url, array $params): string
     {
         $xml = $this->arrayToXml($params);
         
@@ -109,8 +106,6 @@ class Refund
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($ch, CURLOPT_SSLCERT, $certPath);
-        curl_setopt($ch, CURLOPT_SSLKEY, $keyPath);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: text/xml']);
         
         $response = curl_exec($ch);
